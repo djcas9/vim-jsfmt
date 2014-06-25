@@ -38,49 +38,41 @@ function! s:JSFormat()
     let command = g:js_fmt_command . ' ' . g:js_fmt_options
     let out = system(command . " " . l:tmpname)
 
-    echomsg v:shell_error
+    let errors = []
 
-    "if there is no error on the temp file, gofmt our original file
-    if v:shell_error == 0
-        try | silent undojoin | catch | endtry
-        silent execute "%!" . command
+    let tokens = matchlist(out, '{ [Error: Line \(\d\+\): \(.\+\)\] index: \(\d\+\), lineNumber: \(\d\+\), column: \(\d\+\) }')
 
-        " only clear quickfix if it was previously set, this prevents closing
-        " other quickfixs
-        if s:got_fmt_error 
-            let s:got_fmt_error = 0
-            call setqflist([])
-            cwindow
-        endif
-    elseif g:js_fmt_fail_silently == 0 
-        echomsg "IN ERROR"
-        "otherwise get the errors and put them to quickfix window
-        let errors = []
-        " stdin { [Error: Line 3: Unexpected token ILLEGAL] index: 31,
-        " lineNumber: 3, column: 11 }
-        for line in split(out, '\n')
-            let tokens = matchlist(line, '^\(.\{-}\):\(\d\+\):\(\d\+\)\s*\(.*\)')
-            if !empty(tokens)
-                call add(errors, {"filename": @%,
-                                 \"lnum":     tokens[2],
-                                 \"col":      tokens[3],
-                                 \"text":     tokens[4]})
-            endif
-        endfor
-        if empty(errors)
-            % | " Couldn't detect gofmt error format, output errors
-        endif
-        if !empty(errors)
-            call setqflist(errors, 'r')
-            echohl Error | echomsg "jsfmt returned error" | echohl None
-        endif
-        let s:got_fmt_error = 1
-        cwindow
+    if !empty(tokens)
+      call add(errors, {"filename": @%,
+            \"lnum":     tokens[1],
+            \"col":      tokens[5],
+            \"text":     tokens[2]})
     endif
+
+    if empty(errors)
+      " NO ERROR
+      try | silent undojoin | catch | endtry
+      silent execute "%!" . command
+      " only clear quickfix if it was previously set, this prevents closing
+      " other quickfixs
+      if s:got_fmt_error 
+        let s:got_fmt_error = 0
+        call setqflist([])
+        cwindow
+      endif
+    endif
+
+    if !empty(errors)
+      call setqflist(errors, 'r')
+      echohl Error | echomsg "jsfmt returned error" | echohl None
+    endif
+
+    let s:got_fmt_error = 1
+    cwindow
 
     call delete(l:tmpname)
     call winrestview(l:curw)
-endfunction
+  endfunction
 
 let b:did_ftplugin_js_fmt = 1
 

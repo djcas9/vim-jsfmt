@@ -38,6 +38,8 @@ function! s:JSFormat()
     let command = g:js_fmt_command . ' ' . g:js_fmt_options
     let out = system(command . " " . l:tmpname)
 
+    echomsg v:shell_error
+
     "if there is no error on the temp file, gofmt our original file
     if v:shell_error == 0
         try | silent undojoin | catch | endtry
@@ -51,8 +53,11 @@ function! s:JSFormat()
             cwindow
         endif
     elseif g:js_fmt_fail_silently == 0 
+        echomsg "IN ERROR"
         "otherwise get the errors and put them to quickfix window
         let errors = []
+        " stdin { [Error: Line 3: Unexpected token ILLEGAL] index: 31,
+        " lineNumber: 3, column: 11 }
         for line in split(out, '\n')
             let tokens = matchlist(line, '^\(.\{-}\):\(\d\+\):\(\d\+\)\s*\(.*\)')
             if !empty(tokens)
@@ -67,7 +72,7 @@ function! s:JSFormat()
         endif
         if !empty(errors)
             call setqflist(errors, 'r')
-            echohl Error | echomsg "Gofmt returned error" | echohl None
+            echohl Error | echomsg "jsfmt returned error" | echohl None
         endif
         let s:got_fmt_error = 1
         cwindow

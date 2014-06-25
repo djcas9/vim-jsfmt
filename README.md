@@ -3,6 +3,25 @@
 vim-jsfmt is a vim plugin for the formatiting tool [`jsfmt`](https://github.com/rdio/jsfmt). vim-jsfmt is based on the 
 go-fmt vimscript that ships with the [`vim-go`](https://github.com/fatih/vim-go) plugin.
 
+## Installation
+
+[Download zip file]():
+
+To install using pathogen.vim:
+
+    cd ~/.vim/bundle
+    git clone https://github.com/mephux/vim-jsfmt.git
+    
+To install using [Vundle](https://github.com/gmarik/Vundle.vim):
+
+    # add this line to your .vimrc file
+    Plugin "mephux/vim-jsfmt"
+
+To checkout the source from repository:
+
+    cd ~/.vim/bundle
+    git clone https://github.com/mephux/vim-jsfmt.git
+
 # Settings
 
 By default vim-jsfmt shows errors for the jsfmt command, to disable it:

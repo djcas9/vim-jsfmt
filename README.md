@@ -5,17 +5,17 @@ go-fmt vimscript that ships with the [`vim-go`](https://github.com/fatih/vim-go)
 
 ## Installation
 
-[Download zip file]():
+[Download zip file](https://github.com/mephux/vim-jsfmt/archive/master.zip):
 
-To install using pathogen.vim:
-
-    cd ~/.vim/bundle
-    git clone https://github.com/mephux/vim-jsfmt.git
-    
 To install using [Vundle](https://github.com/gmarik/Vundle.vim):
 
     # add this line to your .vimrc file
     Plugin "mephux/vim-jsfmt"
+
+To install using [pathogen.vim](https://github.com/tpope/vim-pathogen):
+
+    cd ~/.vim/bundle
+    git clone https://github.com/mephux/vim-jsfmt.git
 
 To checkout the source from repository:
 

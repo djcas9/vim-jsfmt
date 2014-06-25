@@ -1,35 +1,3 @@
-" Copyright 2011 The Go Authors. All rights reserved.
-" Use of this source code is governed by a BSD-style
-" license that can be found in the LICENSE file.
-"
-" fmt.vim: Vim command to format Go files with gofmt.
-"
-" This filetype plugin add a new commands for go buffers:
-"
-"   :Fmt
-"
-"       Filter the current Go buffer through gofmt.
-"       It tries to preserve cursor position and avoids
-"       replacing the buffer with stderr output.
-"
-" Options:
-"
-"   g:go_fmt_commands [default=1]
-"
-"       Flag to indicate whether to enable the commands listed above.
-"
-"   g:go_fmt_command [default="gofmt"]
-"
-"       Flag naming the gofmt executable to use.
-"
-"   g:go_fmt_autosave [default=1]
-"
-"       Flag to auto call :Fmt when saved file
-"
-if exists("b:did_ftplugin_js_fmt")
-    finish
-endif
-
 if !exists("g:js_fmt_commands")
     let g:js_fmt_commands = 1
 endif

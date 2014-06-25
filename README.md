@@ -28,3 +28,11 @@ Configure jsfmt cli options.
 ```vim
 let g:js_fmt_options = '--no-format'
 ```
+
+## Self-Promotion
+
+Like vim-jsfmt.vim? Follow the repository on
+[GitHub](https://github.com/mephux/vim-jsfmt) and if
+you're feeling especially charitable, follow [mephux](http://dweb.io/) on
+[Twitter](http://twitter.com/mephux) and
+[GitHub](https://github.com/mephux).

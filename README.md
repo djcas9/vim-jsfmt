@@ -33,6 +33,6 @@ let g:js_fmt_options = '--no-format'
 
 Like vim-jsfmt.vim? Follow the repository on
 [GitHub](https://github.com/mephux/vim-jsfmt) and if
-you're feeling especially charitable, follow [mephux](http://dweb.io/) on
+you would like to stalk me, follow [mephux](http://dweb.io/) on
 [Twitter](http://twitter.com/mephux) and
 [GitHub](https://github.com/mephux).

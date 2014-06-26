@@ -28,8 +28,6 @@ endif
 
 let s:got_fmt_error = 0
 
-"  modified and improved version, doesn't undo changes and break undo history
-"  - fatih 2014
 function! s:JSFormat()
     let l:curw=winsaveview()
     let l:tmpname=tempname()

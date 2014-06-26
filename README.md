@@ -11,10 +11,10 @@ By default vim-jsfmt shows errors for the jsfmt command, to disable it:
 let g:js_fmt_fail_silently = 1
 ```
 
-Disable auto fmt on save:
+Enable auto fmt on save:
 
 ```vim
-let g:js_fmt_autosave = 0
+let g:js_fmt_autosave = 1
 ```
 
 Set the command to use for formating.

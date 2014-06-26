@@ -7,7 +7,7 @@ if !exists("g:js_fmt_command")
 endif
 
 if !exists('g:js_fmt_autosave')
-    let g:js_fmt_autosave = 1
+    let g:js_fmt_autosave = 0
 endif
 
 if !exists('g:js_fmt_fail_silently')

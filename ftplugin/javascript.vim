@@ -31,10 +31,12 @@ let s:got_fmt_error = 0
 function! s:JSFormat()
     let l:curw=winsaveview()
     let l:tmpname=tempname()
-    call writefile(getline(1,'$'), l:tmpname)
+    " call writefile(getline(1,'$'), l:tmpname)
+    call vimproc#write(getline(1, '$'), l:tmpname)
 
     let command = g:js_fmt_command . ' ' . g:js_fmt_options
-    let out = system(command . " " . l:tmpname)
+    " let out = system(command . " " . l:tmpname)
+    let out = vimproc#system(command . " " . l:tmpname)
 
     let errors = []
 

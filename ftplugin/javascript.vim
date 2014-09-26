@@ -29,51 +29,50 @@ endif
 let s:got_fmt_error = 0
 
 function! s:JSFormat()
-    let l:curw=winsaveview()
-    let l:tmpname=tempname()
-    " call writefile(getline(1,'$'), l:tmpname)
-    call vimproc#write(getline(1, '$'), l:tmpname)
+  let l:curw=winsaveview()
+  let l:tmpname=tempname()
+  call writefile(getline(1,'$'), l:tmpname)
 
-    let command = g:js_fmt_command . ' ' . g:js_fmt_options
-    " let out = system(command . " " . l:tmpname)
-    let out = vimproc#system(command . " " . l:tmpname)
+  let command = g:js_fmt_command . ' ' . g:js_fmt_options
+  let out = system(command . " " . l:tmpname)
 
-    let errors = []
+  let tokens = matchlist(out, '{ [Error: Line \(\d\+\): \(.\+\)\] index: \(\d\+\), lineNumber: \(\d\+\), column: \(\d\+\) }')
 
-    let tokens = matchlist(out, '{ [Error: Line \(\d\+\): \(.\+\)\] index: \(\d\+\), lineNumber: \(\d\+\), column: \(\d\+\) }')
+  let errors = []
 
-    if !empty(tokens)
-      call add(errors, {"filename": @%,
-            \"lnum":     tokens[1],
-            \"col":      tokens[5],
-            \"text":     tokens[2]})
+  if !empty(tokens)
+    call add(errors, {"filename": @%,
+          \"lnum":     tokens[1],
+          \"col":      tokens[5],
+          \"text":     tokens[2]})
+  endif
+
+  if empty(errors)
+    " NO ERROR
+    try | silent undojoin | catch | endtry
+    silent execute "%!" . command
+
+    " only clear quickfix if it was previously set, this prevents closing
+    " other quickfixs
+    if s:got_fmt_error 
+      let s:got_fmt_error = 0
+      call setqflist([])
+      cwindow
     endif
+  endif
 
-    if empty(errors)
-      " NO ERROR
-      try | silent undojoin | catch | endtry
-      silent execute "%!" . command
-      $delete
-      " only clear quickfix if it was previously set, this prevents closing
-      " other quickfixs
-      if s:got_fmt_error 
-        let s:got_fmt_error = 0
-        call setqflist([])
-        cwindow
-      endif
-    endif
+  if !empty(errors)
+    call setqflist(errors, 'r')
+    echohl Error | echomsg "jsfmt returned error" | echohl None
+  endif
 
-    if !empty(errors)
-      call setqflist(errors, 'r')
-      echohl Error | echomsg "jsfmt returned error" | echohl None
-    endif
+  let s:got_fmt_error = 1
+  cwindow
 
-    let s:got_fmt_error = 1
-    cwindow
+  call delete(l:tmpname)
+  call winrestview(l:curw)
 
-    call delete(l:tmpname)
-    call winrestview(l:curw)
-  endfunction
+endfunction
 
 let b:did_ftplugin_js_fmt = 1
 

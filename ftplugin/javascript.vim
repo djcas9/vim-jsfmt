@@ -36,6 +36,14 @@ function! s:JSFormat()
   let command = g:js_fmt_command . ' ' . g:js_fmt_options
   let out = system(command . " " . l:tmpname)
 
+  if !empty(matchstr(out, 'jsfmt: command not found'))
+    echohl Error
+    echomsg "jsfmt not found. Please install jsfmt first."
+    echohl None
+    !
+    return
+  endif
+
   let tokens = matchlist(out, '{ [Error: Line \(\d\+\): \(.\+\)\] index: \(\d\+\), lineNumber: \(\d\+\), column: \(\d\+\) }')
 
   let errors = []
@@ -54,7 +62,7 @@ function! s:JSFormat()
 
     " only clear quickfix if it was previously set, this prevents closing
     " other quickfixs
-    if s:got_fmt_error 
+    if s:got_fmt_error
       let s:got_fmt_error = 0
       call setqflist([])
       cwindow

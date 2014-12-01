@@ -39,6 +39,7 @@ function! s:JSFormat()
   if !empty(matchstr(out, 'jsfmt: command not found'))
     echohl Error
     echomsg "jsfmt not found. Please install jsfmt first."
+    echomsg "npm install -g jsfmt"
     echohl None
     !
     return

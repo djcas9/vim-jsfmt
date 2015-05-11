@@ -60,7 +60,6 @@ function! s:JSFormat()
     " NO ERROR
     try | silent undojoin | catch | endtry
     silent execute "%!" . command
-    $delete
 
     " only clear quickfix if it was previously set, this prevents closing
     " other quickfixs

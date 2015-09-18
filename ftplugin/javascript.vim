@@ -45,7 +45,8 @@ function! s:JSFormat()
     return
   endif
 
-  let tokens = matchlist(out, '{ [Error: Line \(\d\+\): \(.\+\)\] index: \(\d\+\), lineNumber: \(\d\+\), column: \(\d\+\) }')
+  "let tokens = matchlist(out, '{ [Error: Line \(\d\+\): \(.\+\)\]\s\+index:\s\+\(\d\+\),\s\+lineNumber:\s\+\(\d\+\),\s\+column:\s\+\(\d\+\)')
+  let tokens = matchlist(out, '{ [Error: Line \(\d\+\): \(.\+\)\]\n\s\+index:\s\+\(\d\+\),\n\s\+lineNumber:\s\+\(\d\+\),\n\s\+column:\s\+\(\d\+\)')
 
   let errors = []
 

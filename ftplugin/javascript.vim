@@ -71,13 +71,13 @@ function! s:JSFormat()
     endif
   endif
 
-  if !empty(errors)
+  if !empty(errors) && !g:js_fmt_fail_silently
     call setqflist(errors, 'r')
     echohl Error | echomsg "jsfmt returned error" | echohl None
-  endif
 
-  let s:got_fmt_error = 1
-  cwindow
+      let s:got_fmt_error = 1
+      cwindow
+  endif
 
   call delete(l:tmpname)
   call winrestview(l:curw)

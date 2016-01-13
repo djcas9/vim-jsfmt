@@ -10,6 +10,10 @@ if !exists('g:js_fmt_autosave')
     let g:js_fmt_autosave = 0
 endif
 
+if !exists('g:js_fmt_version')
+    let g:js_fmt_version = "0.5.2"
+endif
+
 if !exists('g:js_fmt_fail_silently')
     let g:js_fmt_fail_silently = 0
 endif
@@ -29,26 +33,50 @@ endif
 let s:got_fmt_error = 0
 
 function! s:JSFormat()
+
+  if (&ft=='json')
+    let g:js_fmt_options = '--json'
+  endif
+
   let l:curw=winsaveview()
   let l:tmpname=tempname()
+
   call writefile(getline(1,'$'), l:tmpname)
 
-  let command = g:js_fmt_command . ' ' . g:js_fmt_options
-  let out = system(command . " " . l:tmpname)
+  " version test
+  let versionCommand = g:js_fmt_command . ' --version' 
+  let versionTest = system(versionCommand . " " . l:tmpname)
 
-  if !empty(matchstr(out, 'jsfmt: command not found'))
+  if !empty(matchstr(versionTest, 'jsfmt: command not found'))
     echohl Error
     echomsg "jsfmt not found. Please install jsfmt first."
     echomsg "npm install -g jsfmt"
     echohl None
-    !
+    " !
     return
   endif
 
-  "let tokens = matchlist(out, '{ [Error: Line \(\d\+\): \(.\+\)\]\s\+index:\s\+\(\d\+\),\s\+lineNumber:\s\+\(\d\+\),\s\+column:\s\+\(\d\+\)')
-  let tokens = matchlist(out, '{ [Error: Line \(\d\+\): \(.\+\)\]\n\s\+index:\s\+\(\d\+\),\n\s\+lineNumber:\s\+\(\d\+\),\n\s\+column:\s\+\(\d\+\)')
+  if empty(matchstr(versionTest, "^jsfmt " . g:js_fmt_version))
+    echohl Error
+    echomsg "vim-jsfmt required jsfmt version " . g:js_fmt_version . " or greater."
+    echomsg "npm install -g jsfmt"
+    echohl None
+    " !
+    return
+  endif
+
+  let command = g:js_fmt_command . ' ' . g:js_fmt_options
+  let out = system(command . " " . l:tmpname)
 
   let errors = []
+
+  " < 0.5.2
+  " let patternOld = '{ \[Error: Line \(\d\+\): \(.\+\)\] index: \(\d\+\), lineNumber: \(\d\+\), column: \(\d\+\) }'
+
+  " >= 0.5.2
+  let pattern = '{ \[Error: Line \(\d\+\): \(.\+\)\]\n\s\sindex: \(\d\+\),\n\s\slineNumber: \(\d\+\),\n\s\scolumn: \(\d\+\),\n\s\sdescription: \(.\+\) }' 
+
+  let tokens = matchlist(out, pattern)
 
   if !empty(tokens)
     call add(errors, {"filename": @%,
@@ -73,7 +101,7 @@ function! s:JSFormat()
 
   if !empty(errors) && !g:js_fmt_fail_silently
     call setqflist(errors, 'r')
-    echohl Error | echomsg "jsfmt returned error" | echohl None
+    " echohl Error | echomsg "jsfmt returned error" | echohl None
 
       let s:got_fmt_error = 1
       cwindow

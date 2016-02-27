@@ -56,7 +56,7 @@ function! s:JSFormat()
     return
   endif
 
-  if empty(matchstr(versionTest, "^jsfmt " . g:js_fmt_version))
+  if matchstr(versionTest, '\d.\d.\d') < g:js_fmt_version
     echohl Error
     echomsg "vim-jsfmt required jsfmt version " . g:js_fmt_version . " or greater."
     echomsg "npm install -g jsfmt"

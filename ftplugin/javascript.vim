@@ -44,27 +44,27 @@ function! s:JSFormat()
   call writefile(getline(1,'$'), l:tmpname)
 
   " version test
-  " let versionCommand = g:js_fmt_command . ' --version' 
-  " let versionTest = system(versionCommand . " " . l:tmpname)
+  let versionCommand = g:js_fmt_command . ' --version' 
+  let versionTest = system(versionCommand . " " . l:tmpname)
 
-  " if !empty(matchstr(versionTest, 'jsfmt: command not found'))
-    " echohl Error
-    " echomsg "jsfmt not found. Please install jsfmt first."
-    " echomsg "npm install -g jsfmt"
-    " echohl None
-    " " !
-    " return
-  " endif
+  if !empty(matchstr(versionTest, 'jsfmt: command not found'))
+    echohl Error
+    echomsg "jsfmt not found. Please install jsfmt first."
+    echomsg "npm install -g jsfmt"
+    echohl None
+    " !
+    return
+  endif
 
-  " if matchstr(versionTest, '\d.\d.\d') < g:js_fmt_version
-    " echohl Error
-    " echomsg "vim-jsfmt required jsfmt version " . g:js_fmt_version . " or greater."
-    " echomsg "npm install -g jsfmt"
-    " echomsg "Your current version is: " . versionTest
-    " echohl None
-    " " !
-    " return
-  " endif
+  if matchstr(versionTest, '\d.\d.\d') < g:js_fmt_version
+    echohl Error
+    echomsg "vim-jsfmt required jsfmt version " . g:js_fmt_version . " or greater."
+    echomsg "npm install -g jsfmt"
+    echomsg "Your current version is: " . versionTest
+    echohl None
+    " !
+    return
+  endif
 
   let command = g:js_fmt_command . ' ' . g:js_fmt_options
   let out = system(command . " " . l:tmpname)

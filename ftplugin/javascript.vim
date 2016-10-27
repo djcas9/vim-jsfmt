@@ -11,7 +11,7 @@ if !exists('g:js_fmt_autosave')
 endif
 
 if !exists('g:js_fmt_version')
-    let g:js_fmt_version = "0.5.2"
+    let g:js_fmt_version = "0.5.3"
 endif
 
 if !exists('g:js_fmt_fail_silently')

@@ -5,7 +5,7 @@ go-fmt vimscript that ships with the [`vim-go`](https://github.com/fatih/vim-go)
 
 ## Installation
 
-** Note: You have to have jsfmt install for this to work. `npm install -g jsfmt` >= version 0.5.2
+** Note: You have to have jsfmt install for this to work. `npm install -g jsfmt` >= version 0.5.3
 
 [Download zip file](https://github.com/mephux/vim-jsfmt/archive/master.zip):
 
